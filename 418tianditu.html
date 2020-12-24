@@ -1,0 +1,73 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.18/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #layerToggle {
+      top: 20px;
+      right: 20px;
+      position: absolute;
+      z-index: 99;
+      background-color: white;
+      border-radius: 8px;
+      padding: 10px;
+      opacity: 0.75;
+    }
+  </style>
+
+  <script>
+    require(["esri/Map", "esri/views/MapView", "esri/layers/WebTileLayer","esri/layers/MapImageLayer"], function (Map, MapView, WebTileLayer,MapImageLayer) {
+
+      var tiledLayer = new WebTileLayer({
+        urlTemplate: "http://{subDomain}.tianditu.gov.cn/DataServer?T=vec_w&x={col}&y={row}&l={level}&tk=a816a1a000b97e201f62323cbe9515b4",
+        subDomains: ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"],
+      });
+
+      var tiledLayer_poi = new WebTileLayer({
+        urlTemplate: "http://{subDomain}.tianditu.gov.cn/DataServer?T=cva_w&x={col}&y={row}&l={level}&tk=a816a1a000b97e201f62323cbe9515b4",
+        subDomains: ["t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7"],
+      });
+	  
+	  var layertest = new MapImageLayer({
+		url: "https://lwb.geoscenewh.cn/server/rest/services/lj/MapServer"
+
+	  });
+	  
+	 
+      var map = new Map({
+        basemap: {
+          baseLayers: [tiledLayer, tiledLayer_poi]
+        }
+      });
+	  
+	  map.add(layertest);
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        zoom: 10,
+        center: [111.53, 27.51] // longitude, latitude
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>
